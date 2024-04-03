@@ -1,0 +1,51 @@
+# Description: Deployment for the aiTrade service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aiTrade
+  labels:
+    app: aiTrade
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: aiTrade
+  template:
+    metadata:
+      name: aiTrade
+      labels:
+        app: aiTrade
+    spec:
+      containers:
+        - name: aiTrade
+          image: TBC
+          imagePullPolicy: IfNotPresent
+          resources:
+            limits:
+              cpus: "2"
+              memory: "1024Mi"
+            requests:
+              cpus: "1"
+              memory: "512Mi"
+          env:
+            - name: wechat.app-id
+              value: app-id
+            - name: wechat.mch-id
+              value: mch-id
+              #In there need consider the payment related configuration
+      restartPolicy: Always
+---
+# Description: Service for the aiTrade service
+apiVersion: v1
+kind: Service
+metadata:
+  name: aiTrade
+spec:
+  selector:
+    app: aiTrade
+  ports:
+    - protocol: TCP
+      port: 8100
+      targetPort: 8100
+  type: NodePort
+---
